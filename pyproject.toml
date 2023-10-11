@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ionic-langchain"
-version = "0.1.0"
+version = "0.0.3"
 description = ""
 authors = ["Owen Sims <owen@ionicapi.com>"]
 readme = "README.md"
@@ -8,6 +8,7 @@ packages = [{include = "ionic_langchain"}]
 
 [tool.poetry.dependencies]
 python = "^3.11"
+langchain = "^0.0.312"
 
 
 [build-system]
