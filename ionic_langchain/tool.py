@@ -53,18 +53,3 @@ class IonicTool:
             description=TOOL_PROMPT,
             verbose=True
         )
-    
-    
-      
-
-class IonicPluginTool(): 
-    def __init__(self, base_url="https://api.ionicapi.com"):
-        self.base_url = base_url
-  
-    def tool(self):
-        tool = AIPluginTool.from_plugin_url(f'{self.base_url}/.well-known/ai-plugin.json')
-        print(tool)
-
-        return tool
-
-
