@@ -12,11 +12,9 @@ from ionic_langchain.prompt import TOOL_PROMPT
 
 class Ionic:
     _sdk: IonicSDK
-    _results_per_query: int
 
-    def __init__(self, results_per_query: int = 5):
+    def __init__(self):
         self._sdk = IonicSDK()
-        self._results_per_query = results_per_query or 5
 
     def query(self, queries: str) -> dict[str, Any]:
         """
@@ -25,13 +23,9 @@ class Ionic:
         """
         request = QueryAPIRequest(
             queries=[
-                Query(
-                    query=query,
-                    num_results=self._results_per_query,
-                )
+                Query(query=query)
                 for query in queries.split(", ")
             ],
-
         )
         response: QueryResponse = self._sdk.query(
             request=request,
