@@ -1,11 +1,10 @@
-# Temp inlining of "SDK"
 import dataclasses
 from typing import Any
 
 from ionic import Ionic as IonicSDK
 from ionic.models.components import QueryAPIRequest, Query
 from ionic.models.operations import QuerySecurity, QueryResponse
-from langchain.tools import AIPluginTool, Tool
+from langchain.tools import Tool
 
 from ionic_langchain.prompt import TOOL_PROMPT
 
