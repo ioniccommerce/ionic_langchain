@@ -453,13 +453,13 @@ files = [
 
 [[package]]
 name = "ionic-api-sdk"
-version = "0.5.2"
+version = "0.5.3"
 description = "Python Client SDK"
 optional = false
 python-versions = ">=3.8"
 files = [
-    {file = "Ionic-API-SDK-0.5.2.tar.gz", hash = "sha256:c52df7e680628bafb685b8af8f1332eebaa6d3c1df749a82fe6930285a0efc65"},
-    {file = "Ionic_API_SDK-0.5.2-py3-none-any.whl", hash = "sha256:9508ba1cb63ff8f366acac3455f73fd3a4d0afde639b48f24559b20e3f1aea15"},
+    {file = "Ionic-API-SDK-0.5.3.tar.gz", hash = "sha256:f57e9e6150b0839d34eafbc8e2039b5bdfdb0eb8a87f8ccf72c4501104297f08"},
+    {file = "Ionic_API_SDK-0.5.3-py3-none-any.whl", hash = "sha256:afa5e3f8bf66e809d30180133ad04d896465dbeeaeee1bb24bad0bc651383722"},
 ]
 
 [package.dependencies]
