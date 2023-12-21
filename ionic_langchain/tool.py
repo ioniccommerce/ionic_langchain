@@ -42,8 +42,11 @@ class Ionic:
 class IonicTool:
     _ionic: Ionic
 
-    def __init__(self):
-        self._ionic = Ionic()
+    def __init__(self, ionic: Optional[Ionic] = None):
+        if ionic:
+            self._ionic = ionic
+        else:
+            self._ionic = Ionic()
 
     def tool(self) -> Tool:
         return Tool(
