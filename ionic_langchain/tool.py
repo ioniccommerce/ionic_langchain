@@ -1,5 +1,5 @@
 import dataclasses
-from typing import Any
+from typing import Any, Optional
 
 from ionic import Ionic as IonicSDK
 from ionic.models.components import QueryAPIRequest, Query
@@ -12,26 +12,26 @@ from ionic_langchain.prompt import TOOL_PROMPT
 class Ionic:
     _sdk: IonicSDK
 
-    def __init__(self):
-        self._sdk = IonicSDK()
+    def __init__(self, sdk: Optional[IonicSDK] = None):
+        if sdk:
+            self._sdk = sdk
+        else:
+            self._sdk = IonicSDK()
 
-    def query(self, queries: str) -> dict[str, Any]:
+    def query(self, queries: str) -> list[dict[str, Any]]:
         """
         FIXME: handle non-200 responses
         TODO: better typing in response
         """
         request = QueryAPIRequest(
-            queries=[
-                Query(query=query)
-                for query in queries.split(", ")
-            ],
+            queries=[Query(query=query) for query in queries.split(", ")],
         )
         response: QueryResponse = self._sdk.query(
             request=request,
             security=QuerySecurity(),
         )
 
-        return dataclasses.asdict(response)
+        return [dataclasses.asdict(r) for r in response.query_api_response.results]
 
 
 # TODO StructuredTool or BaseTool
@@ -50,5 +50,5 @@ class IonicTool:
             func=self._ionic.query,
             name="Ionic Shopping",
             description=TOOL_PROMPT,
-            verbose=True
+            verbose=True,
         )
