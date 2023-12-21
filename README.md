@@ -9,7 +9,7 @@ This tool requires at least `langchain@0.0.350` and can work with any greater pa
 You can install the package from GitHub using `pip`:
 
 ```sh
-pip install git+https://github.com/ioniccommerce/ionic_langchain.git#v0.1.2
+python3 -m pip install git+https://github.com/ioniccommerce/ionic_langchain.git#v0.1.2
 ```
 
 or `poetry`:
