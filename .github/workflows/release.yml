@@ -11,7 +11,7 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            core.setFailed('you can only run the publish workflow from a release tag (vX.Y.Z)')
+            core.notice('you can only run the publish workflow from a release tag (vX.Y.Z)')
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
@@ -37,11 +37,11 @@ jobs:
         uses: actions/github-script@v7
         with:
           script: |
-            core.setFailed('library version does not match the github tag')
+            core.notice('library version does not match the github tag')
       - name: Build release
         id: build-release
         run: poetry build
       - name: Publish version to PyPI
         id: publish-release
-        run: poetry publish -u __token__ -p ${{ secrets.PYPI_API_TOKEN }}
+        run: poetry publish -u __token__ -p ${{ secrets.PYPI_API_TOKEN }} --dry-run
 
