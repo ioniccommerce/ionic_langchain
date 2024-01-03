@@ -33,7 +33,7 @@ jobs:
         # prefix with v to match tag convention
         run: poetry version -s | awk '{ print "version=v" $1 }' >> $GITHUB_OUTPUT
       - name: check library version
-        if: ${{ steps.output-version.outputs.version }} != ${{ github.ref }}
+        if: ${{ steps.output-version.outputs.version }} != ${{ github.ref_name }}
         id: check-version
         uses: actions/github-script@v7
         with:
