@@ -4,7 +4,7 @@ on:
     inputs:
       release_type:
         description: Type of release (see the semantic versioning guides if you need help determining the appropriate choice)
-        type: string
+        type: choice
         default: patch
         # see https://python-poetry.org/docs/cli/#version for more options if we want to enhance the release workflow
         options:
