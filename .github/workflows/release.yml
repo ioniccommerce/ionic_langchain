@@ -44,7 +44,7 @@ jobs:
           commit_message: 🏷️ prepare version ${{ steps.upgrade-version.outputs.version_tag }} for release
           tagging_message: ${{ steps.upgrade-version.outputs.version_tag }}
       - name: create tag and release for new version
-        uses: nicpollo/release-action@v1
+        uses: ncipollo/release-action@v1
         with:
           commit: main
           generateReleaseNotes: true
