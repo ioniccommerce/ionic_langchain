@@ -1,3 +1,4 @@
+name: Publish new release
 on:
   workflow_dispatch:
 jobs:
