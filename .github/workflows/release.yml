@@ -1,18 +1,22 @@
 name: Publish new release
 on:
   workflow_dispatch:
+    inputs:
+      release_type:
+        description: Type of release (see the semantic versioning guides if you need help determining the appropriate choice)
+        type: choice
+        default: patch
+        # see https://python-poetry.org/docs/cli/#version for more options if we want to enhance the release workflow
+        options:
+          - patch
+          - minor
+          - major
 jobs:
   publish-release:
     permissions:
       contents: write
     runs-on: ubuntu-latest
     steps:
-      - name: Ensure valid tag reference
-        if: ${{ github.ref_type != 'tag' || !startsWith(github.ref_name, 'v') }}
-        uses: actions/github-script@v7
-        with:
-          script: |
-            core.setFailed('you can only run the publish workflow from a release tag (vX.Y.Z)')
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
@@ -28,21 +32,27 @@ jobs:
           virtualenvs-create: true
           virtualenvs-in-project: true
           installer-parallel: true
-      - name: output library version
-        id: output-version
-        # prefix with v to match tag convention
-        run: poetry version -s | awk '{ print "version=v" $1 }' >> $GITHUB_OUTPUT
-      - name: check library version
-        if: ${{ steps.output-version.outputs.version != github.ref_name }}
-        id: check-version
-        uses: actions/github-script@v7
+      - name: upgrade library version
+        id: upgrade-version
+        run: |
+         poetry version ${{ github.event.inputs.release_type }} -s \
+         | awk '{ print "version_tag=v" $1 }' >> $GITHUB_OUTPUT
+      - name: commit version upgrade to main
+        uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          script: |
-            core.setFailed('library version does not match the github tag')
+          branch: main
+          commit_message: 🏷️ prepare version ${{ steps.upgrade-version.outputs.version_tag }} for release
+          tagging_message: ${{ steps.upgrade-version.outputs.version_tag }}
+      - name: create release for new version tag
+        uses: ncipollo/release-action@v1
+        with:
+          generateReleaseNotes: true
+          tag: ${{ steps.upgrade-version.outputs.version_tag }}
       - name: Build release
         id: build-release
         run: poetry build
       - name: Publish version to PyPI
         id: publish-release
+        # TODO investigate OIDC https://docs.pypi.org/trusted-publishers/
         run: poetry publish -u __token__ -p ${{ secrets.PYPI_API_TOKEN }}
 
