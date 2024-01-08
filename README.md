@@ -6,7 +6,7 @@ Ionic Langchain provides a wrapper around the Ionic Commerce's SDK for use as a 
 
 This tool requires at least `langchain@0.0.350` and can work with any greater patch release the `0.0.x` series.
 
-We currently support python 3.11 and above, but if you need support for a lower version, please open an issue and we will add support.
+We currently support python 3.8.1 and above, but if you need support for a lower version, please open an issue and we will add support.
 
 You can install the package from PyPI using `pip`:
 
@@ -73,4 +73,4 @@ tool = IonicTool(ionic=ionic).tool()
 
 ## Development
 
-Ionic Langchain is not currently accepting external contributions.  Contact us via [this form](https://ionicapi.com/contact) if you would like to contribute.
+Coming soon. Please feel free to open an issue.
