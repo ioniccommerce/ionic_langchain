@@ -8,16 +8,16 @@ This tool requires at least `langchain@0.0.350` and can work with any greater pa
 
 We currently support python 3.11 and above, but if you need support for a lower version, please open an issue and we will add support.
 
-You can install the package from GitHub using `pip`:
+You can install the package from PyPI using `pip`:
 
 ```sh
-python3 -m pip install git+https://github.com/ioniccommerce/ionic_langchain.git#v0.1.2
+python3 -m pip install ionic-langchain
 ```
 
 or `poetry`:
 
 ```sh
-poetry add git+https://github.com/ioniccommerce/ionic_langchain.git#v0.1.2
+poetry add ionic-langchain
 ```
 
 ## Usage
