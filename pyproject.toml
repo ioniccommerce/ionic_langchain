@@ -7,9 +7,10 @@ readme = "README.md"
 packages = [{include = "ionic_langchain"}]
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.8.10"
 langchain = "~0.0.352"
 ionic-api-sdk = "0.5.2"
+pytest = "^7.4.4"
 
 
 [build-system]

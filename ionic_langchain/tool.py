@@ -18,7 +18,7 @@ class Ionic:
         else:
             self._sdk = IonicSDK()
 
-    def query(self, queries: str) -> list[dict[str, Any]]:
+    def query(self, queries: str) -> list:
         """
         FIXME: handle non-200 responses
         TODO: better typing in response
@@ -34,11 +34,6 @@ class Ionic:
         return [dataclasses.asdict(r) for r in response.query_api_response.results]
 
 
-# TODO StructuredTool or BaseTool
-# https://github.com/langchain-ai/langchain/issues/4197
-# https://python.langchain.com/docs/modules/agents/tools/multi_input_tool
-
-
 class IonicTool:
     _ionic: Ionic
 
@@ -51,7 +46,7 @@ class IonicTool:
     def tool(self) -> Tool:
         return Tool(
             func=self._ionic.query,
-            name="Ionic Shopping",
+            name="Ionic Commerce Shopping Tool",
             description=TOOL_PROMPT,
             verbose=True,
         )
