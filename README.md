@@ -30,32 +30,28 @@ from ionic_langchain.tool import IonicTool
 from langchain.agents import AgentType, Tool
 from langchain.agents import initialize_agent
 from langchain.chat_models import ChatOpenAI
-from langchain.memory import ConversationBufferWindowMemory, RedisChatMessageHistory
 
-
-tools: List[Tool] =  [
+tools =  [
     IonicTool().tool(),
-    # others,
+    # your other tools,
 ]
-redis_memory = RedisChatMessageHistory(url=os.environ.get("REDIS_URL"),session_id="chatId"),
-memory = ConversationBufferWindowMemory(
-    k=12,
-    return_messages=True,
-    chat_memory=redis_memory,
-    memory_key="chat_history",
-)
 
 agent = initialize_agent(
     tools=tools,
-    llm=ChatOpenAI(openai_api_key=os.environ.get("OPENAI_API_KEY"),temperature=0.5),
-    agent=AgentType.CHAT_CONVERSATIONAL_REACT_DESCRIPTION,
-    memory=memory,
+    llm=ChatOpenAI(openai_api_key="your_key_here", temperature=0.7),
+    agent=AgentType.CHAT_ZERO_SHOT_REACT_DESCRIPTION,
     handle_parsing_errors=True,
     verbose=True,
 )
 
-agent.run(input="Roadhouse VHS")
+
+input = "Where can I get tide pods"
+
+agent.run(input=input)
 ```
+
+_Please see the [langchain agent docs](https://python.langchain.com/docs/modules/agents/) for more details on how to build and run agents_
+
 ### Customizing the SDK
 
 `ionic_langchain.tool.IonicTool`'s constructor accepts an instance of `ionic_langchain.tool.Ionic`, a wrapper around [our SDK](https://pypi.org/project/Ionic-API-SDK/).  `ionic_langchain.tool.Ionic`, in turn accepts an  instance of that SDK, so you can provide the tool with a custom configuration:
