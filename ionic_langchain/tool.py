@@ -34,13 +34,10 @@ class Ionic:
     _sdk: IonicSDK
 
     def __init__(self, sdk: Optional[IonicSDK] = None):
-        """
-        :param sdk: Provide your own SDK if you need to customize something; otherwise, a default instance will be used.
-        """
-        if sdk is None:
-            self._sdk = IonicSDK()
-        else:
+        if sdk:
             self._sdk = sdk
+        else:
+            self._sdk = IonicSDK()
 
     def query(
         self,
@@ -76,8 +73,11 @@ class Ionic:
 class IonicTool:
     _ionic: Ionic
 
-    def __init__(self):
-        self._ionic = Ionic()
+    def __init__(self, ionic: Optional[Ionic] = None):
+        if ionic:
+            self._ionic = ionic
+        else:
+            self._ionic = Ionic()
 
     def tool(self) -> Tool:
         """
@@ -86,7 +86,7 @@ class IonicTool:
         """
         return Tool.from_function(
             func=self._ionic.query,
-            name="Ionic Shopping",
+            name="Ionic Commerce Shopping Tool",
             description=TOOL_PROMPT,
             verbose=True,
         )
