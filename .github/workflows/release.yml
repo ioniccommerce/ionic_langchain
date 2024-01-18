@@ -1,0 +1,58 @@
+name: Publish new release
+on:
+  workflow_dispatch:
+    inputs:
+      release_type:
+        description: Type of release (see the semantic versioning guides if you need help determining the appropriate choice)
+        type: choice
+        default: patch
+        # see https://python-poetry.org/docs/cli/#version for more options if we want to enhance the release workflow
+        options:
+          - patch
+          - minor
+          - major
+jobs:
+  publish-release:
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref }}
+      - name: Set up python
+        uses: actions/setup-python@v4
+        with:
+          python-version-file: .python-version
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: "1.6.1"
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+          installer-parallel: true
+      - name: upgrade library version
+        id: upgrade-version
+        run: |
+         poetry version ${{ github.event.inputs.release_type }} -s \
+         | awk '{ print "version_tag=v" $1 }' >> $GITHUB_OUTPUT
+      - name: commit version upgrade to main
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          branch: main
+          commit_message: 🏷️ prepare version ${{ steps.upgrade-version.outputs.version_tag }} for release
+          tagging_message: ${{ steps.upgrade-version.outputs.version_tag }}
+      - name: create release for new version tag
+        uses: ncipollo/release-action@v1
+        with:
+          generateReleaseNotes: true
+          tag: ${{ steps.upgrade-version.outputs.version_tag }}
+      - name: Build release
+        id: build-release
+        run: poetry build
+      - name: Publish version to PyPI
+        id: publish-release
+        # TODO investigate OIDC https://docs.pypi.org/trusted-publishers/
+        run: poetry publish -u __token__ -p ${{ secrets.PYPI_API_TOKEN }}
+
