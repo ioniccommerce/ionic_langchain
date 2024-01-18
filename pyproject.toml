@@ -19,6 +19,9 @@ poethepoet = "^0.24.4"
 [tool.poe.tasks.fmt]
 cmd = "black ionic_langchain tests"
 
+[tool.poe.tasks.test]
+cmd = "pytest tests/"
+
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
