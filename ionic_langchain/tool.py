@@ -1,9 +1,9 @@
 import dataclasses
-from typing import Any, Optional, Annotated, Sequence, List
+from typing import Annotated, Any, Optional, Sequence
 
 from ionic import Ionic as IonicSDK
-from ionic.models.components import QueryAPIRequest, Query as SDKQuery
-from ionic.models.operations import QuerySecurity, QueryResponse
+from ionic.models.components import Query as SDKQuery, QueryAPIRequest
+from ionic.models.operations import QueryResponse, QuerySecurity
 from langchain_core.tools import Tool
 from pydantic import BaseModel, StringConstraints
 
@@ -14,7 +14,7 @@ QueryString = Annotated[str, StringConstraints(strip_whitespace=True, min_length
 
 class Query(BaseModel):
     """
-    :param queries: one or more queries separated by commas
+    :param query: query string for product or product category with attributes.
     :param num_results: how many results should be returned.
     :param min_price: minimum price of products in recommendation.  Some results may be slightly lower than specified.
     :param max_price: maximum price of products in recommendation.  Some results may be slightly higher than specified.
@@ -24,10 +24,6 @@ class Query(BaseModel):
     num_results: Optional[int] = None
     min_price: Optional[int] = None
     max_price: Optional[int] = None
-
-
-class QueryInput(BaseModel):
-    queries: List[Query]
 
 
 class Ionic:
@@ -41,24 +37,21 @@ class Ionic:
 
     def query(
         self,
-        query_input: QueryInput,
+        query: Query,
     ) -> Sequence[dict[str, Any]]:
-        if len(query_input.queries) == 0:
+        if not query:
             raise ValueError("query_input must not be empty")
         """
         :param query_input:  see QueryInput
         :return:
         """
         request = QueryAPIRequest(
-            queries=[
-                SDKQuery(
-                    query=query.query,
-                    num_results=query.num_results,
-                    min_price=query.min_price,
-                    max_price=query.max_price,
-                )
-                for query in query_input.queries
-            ],
+            query=SDKQuery(
+                query=str(query.query),
+                num_results=query.num_results,
+                min_price=query.min_price,
+                max_price=query.max_price,
+            )
         )
         response: QueryResponse = self._sdk.query(
             request=request,

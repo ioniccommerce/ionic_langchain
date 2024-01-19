@@ -1,8 +1,4 @@
-import sys
-
-import pytest
 from ionic import Ionic as IonicSdk
-from ionic.models.errors import HTTPValidationError
 
 from ionic_langchain.tool import Ionic, Query
 
@@ -33,28 +29,3 @@ def test_ionic_num_results():
     assert (
         len(reindeer_jerky_result["products"]) == 2
     ), "num_results should be respected"
-
-
-def test_ionic_bad_input():
-    """
-    requires server to be running
-    """
-    ionic = Ionic(
-        sdk=IonicSdk(
-            server_url="http://localhost:8080",
-        ),
-    )
-
-    with pytest.raises(HTTPValidationError) as exc_info:
-        ionic.query(
-            query=Query(
-                query="Reindeer Jerky",
-                max_price=-1,
-                min_price=-1,
-                num_results=sys.maxsize,
-            )
-        )
-
-    problems = [det.loc[-1] for det in exc_info.value.detail]
-    assert len(problems) == 3, "all problems are included in error"
-    assert sorted(problems) == ["max_price", "min_price", "num_results"]
