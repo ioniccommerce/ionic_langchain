@@ -1,6 +1,6 @@
 from ionic import Ionic as IonicSdk
 
-from ionic_langchain.tool import Ionic, Query
+from ionic_langchain.tool import Ionic, Query, QueryInput
 
 
 def test_ionic_num_results():
@@ -11,10 +11,11 @@ def test_ionic_num_results():
         sdk=IonicSdk(server_url="http://localhost:8080"),
     )
     results = ionic.query(
-        query=Query(
-            query="Reindeer Jerky",
-            num_results=2,
-        )
+        query_input=QueryInput(
+            query=Query(
+                query="Reindeer Jerky",
+                num_results=2,
+            ))
     )
 
     assert len(results) == 1

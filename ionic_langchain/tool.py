@@ -26,6 +26,10 @@ class Query(BaseModel):
     max_price: Optional[int] = None
 
 
+class QueryInput(BaseModel):
+    query: Query
+
+
 class Ionic:
     _sdk: IonicSDK
 
@@ -37,14 +41,15 @@ class Ionic:
 
     def query(
         self,
-        query: Query,
+        query_input: QueryInput,
     ) -> Sequence[dict[str, Any]]:
-        if not query:
+        if not query_input.query:
             raise ValueError("query must not be empty")
         """
-        :param query:  Query object
+        :param query_input:  see QueryInput
         :return:
         """
+        query = query_input.query
         request = QueryAPIRequest(
             query=SDKQuery(
                 query=str(query.query),

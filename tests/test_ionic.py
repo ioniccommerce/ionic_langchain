@@ -4,7 +4,7 @@ import pytest
 from ionic import Ionic as IonicSdk
 from ionic.models.errors import HTTPValidationError
 
-from ionic_langchain.tool import Ionic, Query
+from ionic_langchain.tool import Ionic, Query, QueryInput
 
 
 def test_ionic_num_results():
@@ -15,9 +15,11 @@ def test_ionic_num_results():
         sdk=IonicSdk(server_url="http://localhost:8080"),
     )
     results = ionic.query(
-        query=Query(
-            query="Reindeer Jerky",
-            num_results=2,
+        query_input=QueryInput(
+            query=Query(
+                query="Reindeer Jerky",
+                num_results=2,
+            )
         )
     )
 
@@ -47,11 +49,13 @@ def test_ionic_bad_input():
 
     with pytest.raises(HTTPValidationError) as exc_info:
         ionic.query(
-            query=Query(
-                query="Reindeer Jerky",
-                max_price=-1,
-                min_price=-1,
-                num_results=sys.maxsize,
+            query_input=QueryInput(
+                query=Query(
+                    query="Reindeer Jerky",
+                    max_price=-1,
+                    min_price=-1,
+                    num_results=sys.maxsize,
+                )
             )
         )
 
