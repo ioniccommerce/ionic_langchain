@@ -40,9 +40,9 @@ class Ionic:
         query: Query,
     ) -> Sequence[dict[str, Any]]:
         if not query:
-            raise ValueError("query_input must not be empty")
+            raise ValueError("query must not be empty")
         """
-        :param query_input:  see QueryInput
+        :param query:  Query object
         :return:
         """
         request = QueryAPIRequest(
