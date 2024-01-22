@@ -1,34 +1,12 @@
 import dataclasses
-from typing import Annotated, Any, Optional, Sequence
+from typing import Any, Optional, Sequence
 
 from ionic import Ionic as IonicSDK
 from ionic.models.components import Query as SDKQuery, QueryAPIRequest
 from ionic.models.operations import QueryResponse, QuerySecurity
 from langchain_core.tools import Tool
-from pydantic import BaseModel, StringConstraints
 
 from ionic_langchain.prompt import TOOL_PROMPT
-
-QueryString = Annotated[str, StringConstraints(strip_whitespace=True, min_length=1)]
-
-
-class Query(BaseModel):
-    """
-    :param query: query string for product or product category with attributes.
-    :param num_results: how many results should be returned.
-    :param min_price: minimum price of products in recommendation.  Some results may be slightly lower than specified.
-    :param max_price: maximum price of products in recommendation.  Some results may be slightly higher than specified.
-    """
-
-    query: QueryString
-    num_results: Optional[int] = None
-    min_price: Optional[int] = None
-    max_price: Optional[int] = None
-
-
-class QueryInput(BaseModel):
-    query: Query
-
 
 class Ionic:
     _sdk: IonicSDK
@@ -41,21 +19,24 @@ class Ionic:
 
     def query(
         self,
-        query_input: QueryInput,
+        query_input: str,
     ) -> Sequence[dict[str, Any]]:
-        if not query_input.query:
+        if not query_input:
             raise ValueError("query must not be empty")
         """
         :param query_input:  see QueryInput
         :return:
         """
-        query = query_input.query
+        split_query = query_input.split(",")
+        query = split_query + [None] * (4 - len(split_query))
+        query = [item.strip() if item is not None else None for item in query]
+        print("query", query)
         request = QueryAPIRequest(
             query=SDKQuery(
-                query=str(query.query),
-                num_results=query.num_results,
-                min_price=query.min_price,
-                max_price=query.max_price,
+                query=str(query[0]),
+                num_results=int(query[1]) if query[1] not in [None, ''] else None,
+                min_price=int(query[2]) if query[2] not in [None, ''] else None,
+                max_price=int(query[3]) if query[3] not in [None, ''] else None,
             )
         )
         response: QueryResponse = self._sdk.query(
