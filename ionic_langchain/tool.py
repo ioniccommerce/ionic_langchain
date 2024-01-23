@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import dataclasses
 from typing import Any, Optional, Sequence
 
@@ -7,6 +9,7 @@ from ionic.models.operations import QueryResponse, QuerySecurity
 from langchain_core.tools import Tool
 
 from ionic_langchain.prompt import TOOL_PROMPT
+
 
 class Ionic:
     _sdk: IonicSDK
@@ -23,20 +26,14 @@ class Ionic:
     ) -> Sequence[dict[str, Any]]:
         if not query_input:
             raise ValueError("query must not be empty")
-        """
-        :param query_input:  see QueryInput
-        :return:
-        """
-        split_query = query_input.split(",")
-        query = split_query + [None] * (4 - len(split_query))
-        query = [item.strip() if item is not None else None for item in query]
-        print("query", query)
+
+        query, num_results, min_price, max_price = self.gen_query_request(query_input)
         request = QueryAPIRequest(
             query=SDKQuery(
-                query=str(query[0]),
-                num_results=int(query[1]) if query[1] not in [None, ''] else None,
-                min_price=int(query[2]) if query[2] not in [None, ''] else None,
-                max_price=int(query[3]) if query[3] not in [None, ''] else None,
+                query=query,
+                num_results=num_results,
+                min_price=min_price,
+                max_price=max_price,
             )
         )
         response: QueryResponse = self._sdk.query(
@@ -47,6 +44,29 @@ class Ionic:
         return [
             dataclasses.asdict(result) for result in response.query_api_response.results
         ]
+
+    def _parse_number(self, value: str) -> int | None:
+        return int(value) if value and int(value) >= 0 else None
+
+    def gen_query_request(self, query_input: str) -> tuple[str, int | None, int | None, int | None]:
+        if not query_input:
+            raise ValueError("query must not be empty")
+
+        split_query = query_input.split(",")
+        len4_query = split_query + [None] * (4 - len(split_query))  # pad with None
+
+        query, num_results, min_price, max_price, *rest = [  # *rest ignores extra values
+            item.strip() if item is not None else None for item in len4_query
+        ]
+        if not query:
+            raise ValueError("query must not be empty")
+
+        return (
+            str(query),
+            self._parse_number(num_results),
+            self._parse_number(min_price),
+            self._parse_number(max_price),
+        )
 
 
 class IonicTool:
