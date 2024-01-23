@@ -4,10 +4,10 @@ version = "0.1.8"
 description = ""
 authors = ["Owen Sims <owen@ionicapi.com>"]
 readme = "README.md"
-packages = [{include = "ionic_langchain"}]
+packages = [{ include = "ionic_langchain" }]
 
 [tool.poetry.dependencies]
-python = "^3.8.10"
+python = "^3.8.12"
 langchain = "~0.0.352"
 ionic-api-sdk = "^0.7.0"
 pytest = "^7.4.4"
