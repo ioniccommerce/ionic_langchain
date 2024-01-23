@@ -21,6 +21,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: ${{ github.ref }}
+          token: ${{ secrets.TOKEN_GITHUB_ACTIONS }}
       - name: Set up python
         uses: actions/setup-python@v4
         with:
@@ -35,8 +36,8 @@ jobs:
       - name: upgrade library version
         id: upgrade-version
         run: |
-         poetry version ${{ github.event.inputs.release_type }} -s \
-         | awk '{ print "version_tag=v" $1 }' >> $GITHUB_OUTPUT
+          poetry version ${{ github.event.inputs.release_type }} -s \
+          | awk '{ print "version_tag=v" $1 }' >> $GITHUB_OUTPUT
       - name: commit version upgrade to main
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
