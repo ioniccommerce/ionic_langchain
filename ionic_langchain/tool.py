@@ -93,7 +93,7 @@ class IonicTool:
         """
         return Tool.from_function(
             func=self._ionic.query,
-            name="Ionic Commerce Shopping Tool",
+            name="Ionic_Commerce_Shopping_Tool",
             description=TOOL_PROMPT,
             verbose=True,
         )
