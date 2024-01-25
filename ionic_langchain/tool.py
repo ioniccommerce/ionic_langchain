@@ -48,14 +48,22 @@ class Ionic:
     def _parse_number(self, value: str) -> int | None:
         return int(value) if value and int(value) >= 0 else None
 
-    def gen_query_request(self, query_input: str) -> tuple[str, int | None, int | None, int | None]:
+    def gen_query_request(
+        self, query_input: str
+    ) -> tuple[str, int | None, int | None, int | None]:
         if not query_input:
             raise ValueError("query must not be empty")
 
         split_query = query_input.split(",")
         len4_query = split_query + [None] * (4 - len(split_query))  # pad with None
 
-        query, num_results, min_price, max_price, *rest = [  # *rest ignores extra values
+        (
+            query,
+            num_results,
+            min_price,
+            max_price,
+            *rest,
+        ) = [  # *rest ignores extra values
             item.strip() if item is not None else None for item in len4_query
         ]
         if not query:
