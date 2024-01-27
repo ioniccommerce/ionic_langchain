@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "ionic-langchain"
-version = "0.2.2"
+version = "0.2.3"
 description = ""
 authors = ["Owen Sims <owen@ionicapi.com>"]
 readme = "README.md"
