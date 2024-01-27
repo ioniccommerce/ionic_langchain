@@ -9,5 +9,5 @@ Ionic Tool input is a comma-separated string of values:
   - maximum price in cents
 For example, if looking for coffee beans between 5 and 10 dollars, the tool input would be `coffee beans, 5, 500, 1000`.
 
-Present product results in a way that makes sense in the context of the conversation, being sure to include the name of the product with the provided link to purchase. Other provided information can be included as you see fit, including price, merchant name, etc.
+Present product results as a list, always including the name of the product with the provided link to purchase. Other provided information can be included as relevant to the request, including price, merchant name, etc.
 """)
